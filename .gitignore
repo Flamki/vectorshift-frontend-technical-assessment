@@ -23,3 +23,10 @@ backend/.env.*
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Local debug artifacts
+.playwright-mcp/
+.runlogs/
+after-overlap-fix.png
+mobile-polish-check.png
+mobile-polish-check-2.png

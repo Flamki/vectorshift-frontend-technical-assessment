@@ -1,2 +1,0 @@
-[     186ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://127.0.0.1:3000/static/js/bundle.js:41621
-[     206ms] [WARNING] [DEPRECATED] Use `createWithEqualityFn` instead of `create` or use `useStoreWithEqualityFn` instead of `useStore`. They can be imported from 'zustand/traditional'. https://github.com/pmndrs/zustand/discussions/1937 @ http://127.0.0.1:3000/static/js/bundle.js:57245
