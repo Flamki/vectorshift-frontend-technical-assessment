@@ -1,5 +1,6 @@
 import { DraggableNode } from './draggableNode';
 import { SubmitButton } from './submit';
+import { useStore } from './store';
 
 const workflowTabs = ['Workflow', 'Interface', 'Analytics', 'Manager', 'Playground'];
 const categoryTabs = ['Start', 'VectorShift', 'Knowledge', 'AI', 'Integrations', 'Logic', 'Data', 'Chat'];
@@ -166,6 +167,8 @@ const primaryToolbarNodes = [
 ];
 
 export const PipelineToolbar = ({ isSubheaderCollapsed = false }) => {
+  const loadDemoPipeline = useStore((state) => state.loadDemoPipeline);
+
   return (
     <section className="app-toolbar">
       <div className="workspace-header">
@@ -187,6 +190,7 @@ export const PipelineToolbar = ({ isSubheaderCollapsed = false }) => {
         </div>
 
         <div className="workspace-actions">
+          <button type="button" className="ghost-btn" onClick={loadDemoPipeline}>Load Demo</button>
           <button type="button" className="ghost-btn">Ask Assistant</button>
           <button type="button" className="icon-btn" aria-label="Undo">&lt;</button>
           <button type="button" className="icon-btn" aria-label="Redo">&gt;</button>
