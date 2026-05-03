@@ -1,0 +1,30 @@
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - heading "Pipeline Builder" [level=2] [ref=e6]
+      - paragraph [ref=e7]: Drag nodes onto the canvas to compose your flow.
+    - generic [ref=e8]:
+      - button "Input" [ref=e9]
+      - button "LLM" [ref=e10]
+      - button "Output" [ref=e11]
+      - button "Text" [ref=e12]
+      - button "Filter" [ref=e13]
+      - button "Math" [ref=e14]
+      - button "Merge" [ref=e15]
+      - button "API" [ref=e16]
+      - button "Delay" [ref=e17]
+  - generic [ref=e19]:
+    - generic [ref=e21]:
+      - generic:
+        - img
+    - img [ref=e22]
+    - generic [ref=e24]:
+      - button "zoom in" [ref=e25] [cursor=pointer]:
+        - img [ref=e26]
+      - button "zoom out" [ref=e28] [cursor=pointer]:
+        - img [ref=e29]
+      - button "fit view" [ref=e31] [cursor=pointer]:
+        - img [ref=e32]
+      - button "toggle interactivity" [ref=e34] [cursor=pointer]:
+        - img [ref=e35]
+  - button "Submit Pipeline" [ref=e39] [cursor=pointer]

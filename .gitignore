@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Build artifacts
+frontend/build/
+dist/
+
+# Python artifacts
+__pycache__/
+*.pyc
+backend/__pycache__/
+
+# Environment files
+.env
+.env.*
+frontend/.env
+frontend/.env.*
+backend/.env
+backend/.env.*
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
