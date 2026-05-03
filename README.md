@@ -15,6 +15,14 @@ This submission implements all four requested parts of the assessment using Reac
 
 Frontend submits to `http://127.0.0.1:8000` by default. To change backend URL, set `REACT_APP_API_URL` before starting frontend.
 
+## Live Deployment
+
+- Frontend: `https://frontend-beryl-omega-21.vercel.app`
+- Backend: `https://backend-omega-three-93.vercel.app`
+
+Backend parse endpoint:
+- `POST https://backend-omega-three-93.vercel.app/pipelines/parse`
+
 ## What Was Implemented
 
 ### Part 1: Node Abstraction + 5 New Nodes
