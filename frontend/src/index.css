@@ -792,6 +792,41 @@ body {
   stroke-dasharray: 7 5;
 }
 
+.vs-removable-edge__button {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #7a88c8;
+  border-radius: 999px;
+  background: #eef1ff;
+  color: #5d6db6;
+  font-size: 16px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(31, 43, 63, 0.16);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease, transform 120ms ease, background 120ms ease;
+  z-index: 10;
+}
+
+.vs-removable-edge__hitbox {
+  pointer-events: stroke;
+}
+
+.vs-removable-edge__button.is-visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.vs-removable-edge__button:hover {
+  background: #e2e9ff;
+}
+
 .react-flow__handle-connecting {
   box-shadow: 0 0 0 3px rgba(110, 131, 255, 0.2);
 }

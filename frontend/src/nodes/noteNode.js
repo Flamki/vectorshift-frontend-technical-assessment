@@ -170,7 +170,7 @@ export const NoteNode = ({ id, data }) => {
   return (
     <div className="vs-note" style={{ '--note-bg': noteColor }} ref={noteRef}>
       {isToolbarVisible ? (
-        <div className="vs-note__toolbar nodrag">
+        <div className="vs-note__toolbar nodrag nowheel" onMouseDown={(event) => event.stopPropagation()}>
         <div className="vs-note__toolbar-group">
           <button
             type="button"
@@ -296,11 +296,13 @@ export const NoteNode = ({ id, data }) => {
 
       <div
         ref={editorRef}
-        className="vs-note__editor"
+        className="vs-note__editor nodrag nowheel"
         contentEditable
         suppressContentEditableWarning
         dangerouslySetInnerHTML={{ __html: initialContent }}
         data-placeholder="Enter note text here..."
+        onMouseDown={(event) => event.stopPropagation()}
+        onClick={(event) => event.stopPropagation()}
         onInput={handleEditorInput}
         onFocus={() => {
           if (hideToolbarTimerRef.current) {

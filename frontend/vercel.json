@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://backend-omega-three-93.vercel.app/$1"
+    }
+  ]
+}

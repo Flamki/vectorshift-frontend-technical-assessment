@@ -7,7 +7,19 @@ const selector = (state) => ({
   edges: state.edges,
 });
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
+const isVercelHost =
+  typeof window !== 'undefined' && window.location.hostname.endsWith('.vercel.app');
+
+const FALLBACK_BACKEND_URL = 'https://backend-omega-three-93.vercel.app';
+const configuredApiUrl = (process.env.REACT_APP_API_URL || '').trim();
+
+const getApiBaseCandidates = () => {
+  if (isVercelHost) {
+    return ['/api', configuredApiUrl, FALLBACK_BACKEND_URL].filter(Boolean);
+  }
+
+  return [configuredApiUrl, 'http://127.0.0.1:8000', 'http://localhost:8000'].filter(Boolean);
+};
 
 const INPUT_NODE_TYPES = new Set(['customInput', 'browserExtension']);
 const OUTPUT_NODE_TYPES = new Set(['customOutput']);
@@ -99,15 +111,16 @@ const analyzePipelineStructure = (nodes, edges) => {
   return { warnings: dedupedWarnings, warningsCount: dedupedWarnings.length };
 };
 
-export const SubmitButton = ({ inline = false, label = 'Submit', className = '' }) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { nodes, edges } = useStore(selector, shallow);
+const requestPipelineParse = async (nodes, edges) => {
+  const candidates = Array.from(new Set(getApiBaseCandidates()));
+  let lastNetworkError = null;
+  let lastHttpError = null;
 
-  const onSubmit = async () => {
+  for (const baseUrl of candidates) {
+    const endpoint = `${baseUrl}/pipelines/parse`;
+
     try {
-      setIsSubmitting(true);
-
-      const response = await fetch(`${API_BASE_URL}/pipelines/parse`, {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -115,12 +128,36 @@ export const SubmitButton = ({ inline = false, label = 'Submit', className = '' 
         body: JSON.stringify({ nodes, edges }),
       });
 
-      if (!response.ok) {
-        const errorPayload = await response.text();
-        throw new Error(errorPayload || `Request failed with status ${response.status}`);
+      if (response.ok) {
+        return await response.json();
       }
 
-      const result = await response.json();
+      const errorPayload = await response.text();
+      lastHttpError = `${response.status} from ${endpoint}${errorPayload ? `: ${errorPayload}` : ''}`;
+    } catch (error) {
+      lastNetworkError = `${endpoint} (${error.message})`;
+    }
+  }
+
+  if (lastHttpError) {
+    throw new Error(lastHttpError);
+  }
+
+  if (lastNetworkError) {
+    throw new Error(`Failed to fetch (${lastNetworkError})`);
+  }
+
+  throw new Error('No API endpoint available.');
+};
+
+export const SubmitButton = ({ inline = false, label = 'Submit', className = '' }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { nodes, edges } = useStore(selector, shallow);
+
+  const onSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+      const result = await requestPipelineParse(nodes, edges);
       const structure = analyzePipelineStructure(nodes, edges);
       const structureText =
         structure.warningsCount === 0

@@ -13,6 +13,7 @@ import { MergeNode } from './nodes/mergeNode';
 import { APINode } from './nodes/apiNode';
 import { DelayNode } from './nodes/delayNode';
 import { BrowserExtensionNode } from './nodes/browserExtensionNode';
+import { RemovableEdge } from './edges/removableEdge';
 
 import 'reactflow/dist/style.css';
 
@@ -35,6 +36,10 @@ const nodeTypes = {
   api: APINode,
   delay: DelayNode,
   browserExtension: BrowserExtensionNode,
+};
+
+const edgeTypes = {
+  removable: RemovableEdge,
 };
 
 const initialNodeDataByType = {
@@ -283,6 +288,7 @@ export const PipelineUI = ({ isSubheaderCollapsed = false, onToggleSubheader }) 
         onMove={onMove}
         onInit={setReactFlowInstance}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         proOptions={proOptions}
         minZoom={MIN_ZOOM}
         maxZoom={MAX_ZOOM}

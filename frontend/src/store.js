@@ -7,6 +7,15 @@ import {
 } from 'reactflow';
 
 const DRAFT_STORAGE_KEY = 'vectorshift.pipeline.draft.v1';
+const PERSISTED_EDGE_DEFAULTS = {
+  type: 'removable',
+  animated: true,
+  markerEnd: {
+    type: MarkerType.ArrowClosed,
+    height: 20,
+    width: 20,
+  },
+};
 
 const getInitialDraft = () => {
   if (typeof window === 'undefined') {
@@ -24,7 +33,14 @@ const getInitialDraft = () => {
       return null;
     }
 
-    return parsed;
+    return {
+      ...parsed,
+      edges: parsed.edges.map((edge) => ({
+        ...PERSISTED_EDGE_DEFAULTS,
+        ...edge,
+        type: 'removable',
+      })),
+    };
   } catch (error) {
     return null;
   }
@@ -33,7 +49,7 @@ const getInitialDraft = () => {
 const initialDraft = getInitialDraft();
 
 const defaultEdgeOptions = {
-  type: 'smoothstep',
+  type: 'removable',
   animated: true,
   markerEnd: {
     type: MarkerType.ArrowClosed,
@@ -297,6 +313,11 @@ export const useStore = create((set, get) => ({
       ),
     });
   },
+  removeEdgeById: (edgeId) => {
+    set({
+      edges: get().edges.filter((edge) => edge.id !== edgeId),
+    });
+  },
   resetCanvas: () => {
     set({
       nodeIDs: {},
@@ -323,8 +344,34 @@ export const useStore = create((set, get) => ({
       return;
     }
 
+    const currentEdges = get().edges;
+    const normalizedTargetHandle = connection.targetHandle ?? null;
+
+    const edgesWithoutReplacedInput = currentEdges.filter(
+      (edge) =>
+        !(
+          edge.target === connection.target &&
+          (edge.targetHandle ?? null) === normalizedTargetHandle
+        )
+    );
+
+    const duplicateEdgeExists = edgesWithoutReplacedInput.some(
+      (edge) =>
+        edge.source === connection.source &&
+        edge.target === connection.target &&
+        (edge.sourceHandle ?? null) === (connection.sourceHandle ?? null) &&
+        (edge.targetHandle ?? null) === normalizedTargetHandle
+    );
+
+    if (duplicateEdgeExists) {
+      return;
+    }
+
     set({
-      edges: addEdge({ ...defaultEdgeOptions, ...connection }, get().edges),
+      edges: addEdge(
+        { ...defaultEdgeOptions, ...connection },
+        edgesWithoutReplacedInput
+      ),
     });
   },
   updateNodeField: (nodeId, fieldName, fieldValue) => {
